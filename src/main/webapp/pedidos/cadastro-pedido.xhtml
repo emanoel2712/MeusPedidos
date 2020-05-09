@@ -1,0 +1,248 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns="http://www.w3.org/1999/xhtml">
+
+
+
+	<ui:define name="titulo"> Cadastro de Pedido </ui:define>
+
+	<ui:define name="corpo">
+
+		<h:form>
+			<f:metadata>
+				<f:viewAction action="#{cadastroPedidoBean.inicializar}" />
+			</f:metadata>
+			<h1>Cadastro de Pedido</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar>
+				<f:facet name="left">
+					<p:button value="Novo" />
+					<p:commandButton value="Salvar" ajax="false" />
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="Emitir"
+						action="#{cadastroPedidoBean.cliqueEmitir}" update="numStatus" />
+				</f:facet>
+				<f:facet name="right">
+					<p:button value="Cancelar" />
+				</f:facet>
+				<f:facet name="right">
+					<p:button value="Pesquisar" />
+				</f:facet>
+
+
+			</p:toolbar>
+			<p:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
+				<p:column>
+					<p:panelGrid columns="2" style="width: 90%; margin-top: 20px;">
+
+
+						<p:outputLabel id="numero" value="Numero" for="numero" />
+						<p:outputLabel id="numPedido" size="10" maxlength="10"
+							value="#{cadastroPedidoBean.pedido.numero}" />
+						<p:outputLabel id="status" for="status" value="Status" />
+						<p:outputLabel id="numStatus"
+							value="#{cadastroPedidoBean.pedido.status}" />
+						<p:outputLabel value="Cliente" />
+
+						<p:selectOneMenu value="#{cadastroPedidoBean.pedido.cliente}"
+							converter="converterCliente">
+							<p:ajax listener="#{cadastroPedidoBean.clienteSelecionado}"
+								update="form2" />
+
+							<f:selectItem itemLabel="Selecione o cliente"
+								noSelectionOption="true" />
+							<f:selectItems value="#{cadastroPedidoBean.clientes}" var="c"
+								itemValue="#{c}" itemLabel="#{c.nome}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="Valor do frete" />
+						<p:inputText id="frete" size="60" maxlength="60"
+							value="#{cadastroPedidoBean.pedido.valorFrete}">
+							<p:ajax event="blur" update="valorTotalPedido"
+								listener="#{cadastroPedidoBean.somarValorDoFreteAoTotalPedido}" />
+						</p:inputText>
+					</p:panelGrid>
+				</p:column>
+				<p:column>
+					<p:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
+
+						<p:outputLabel value="Data de criação" />
+						<p:outputLabel value="#{cadastroPedidoBean.pedido.dataCriacao}"
+							id="dataCriacao">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</p:outputLabel>
+
+						<p:outputLabel value="Forma de Pagamento" />
+						<p:selectOneMenu
+							value="#{cadastroPedidoBean.pedido.formaPagamento}">
+							<f:selectItem itemLabel="Selecione a forma de pagamento"
+								noSelectionOption="true" />
+							<f:selectItems value="#{cadastroPedidoBean.forma}" var="f"
+								itemValue="#{f}" itemLabel="#{f.descricao}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="Subtotal" />
+						<p:outputLabel id="subtotal"
+							value="#{cadastroPedidoBean.valorSubTotal}">
+							<p:ajax update="subtotal" event="blur"
+								listener="#{cadastroPedidoBean.totalSubTotal}" />
+						</p:outputLabel>
+
+						<p:outputLabel value="Total do pedido" />
+						<p:outputLabel id="valorTotalPedido"
+							value="#{cadastroPedidoBean.pedido.valorTotal}" />
+					</p:panelGrid>
+				</p:column>
+			</p:panelGrid>
+		</h:form>
+
+		<h:form id="form2">
+			<p:tabView>
+				<p:tab title="Itens">
+					<p:panelGrid columns="6" style="width: 90%; margin-top: 20px;">
+						<p:outputLabel value="Produto" />
+						<p:selectOneMenu value="#{cadastroPedidoBean.itemPedido.produto}"
+							required="true" converter="converterProduto">
+
+							<p:ajax update="valorUnitario estoque" />
+
+							<f:selectItem itemLabel="Selecione o produto"
+								noSelectionOption="true" />
+							<f:selectItems value="#{cadastroPedidoBean.produtos}" var="p"
+								itemValue="#{p}" itemLabel="#{p.nome}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="Valor unitário: " />
+						<p:outputLabel
+							value="#{cadastroPedidoBean.itemPedido.valorUnitario}"
+							id="valorUnitario" />
+						<p:outputLabel value="Estoque: " />
+						<p:outputLabel
+							value="#{cadastroPedidoBean.itemPedido.produto.estoque}"
+							id="estoque" />
+
+
+
+						<p:outputLabel value="Quantidade" />
+						<p:inputText id="quantidade" size="10" maxlength="10"
+							value="#{cadastroPedidoBean.itemPedido.quantidade}">
+
+							<p:ajax update="valorTotalPedidoo" event="blur"
+								listener="#{cadastroPedidoBean.valorTotalAdd}" />
+						</p:inputText>
+
+						<p:outputLabel value="Valor total: " />
+						<p:outputLabel id="valorTotalPedidoo"
+							value="#{cadastroPedidoBean.valorTotal}" />
+
+						<p:commandButton value="Adicionar"
+							action="#{cadastroPedidoBean.adicionarPedidoNaLista}"
+							update="tabela" />
+					</p:panelGrid>
+					<h:panelGrid>
+
+
+
+
+						<p:dataTable value="#{cadastroPedidoBean.itensPedido}" rows="10"
+							paginator="true" paginatorPosition="bottom" var="itemPedido"
+							id="tabela" emptyMessage="Nenhum produto encontrado."
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="({currentPage} de {totalPages})"
+							rowsPerPageTemplate="10,25,50" style="margin-top: 20px;">
+
+							<p:column headerText="Produto"
+								style="text-align: center; width: 100px;">
+								<h:outputText value="#{itemPedido.produto.nome}" />
+							</p:column>
+
+							<p:column headerText="Valor unitário">
+								<h:outputText value="#{itemPedido.valorUnitario}" />
+
+							</p:column>
+
+
+							<p:column headerText="Quantidade">
+								<h:outputText value="#{itemPedido.quantidade}" />
+
+
+							</p:column>
+
+							<p:column headerText="Valor total">
+								<h:outputText value="#{cadastroPedidoBean.valorTotal}" />
+
+							</p:column>
+
+						</p:dataTable>
+
+
+
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Dados de entrega">
+					<h:panelGrid columns="1">
+
+						<h:outputText value="Endereço" />
+						<p:selectOneMenu
+							value="#{cadastroPedidoBean.pedido.enderecoEntrega}"
+							id="endEntrega">
+
+
+
+							<f:selectItem itemLabel="Selecione o endereço"
+								noSelectionOption="true" />
+							<f:selectItems value="#{cadastroPedidoBean.enderecos}" var="e"
+								itemValue="#{e}" itemLabel="#{e.logradouro}" />
+						</p:selectOneMenu>
+						<h:panelGrid columns="4">
+							<p:outputLabel value="Estado" for="estado" />
+							<p:inputText id="estado" size="60" maxlength="60"
+								value="#{cadastroPedidoBean.endereco.estado}" disabled="true" />
+
+
+							<p:outputLabel value="Cidade" for="cidade" />
+							<p:inputText id="cidade" size="60" maxlength="60"
+								value="#{cadastroPedidoBean.endereco.cidade}" disabled="true" />
+
+							<p:outputLabel value="Logradouro " for="logradouro" />
+							<p:inputText id="logradouro" size="60" maxlength="60"
+								value="#{cadastroPedidoBean.endereco.logradouro}"
+								disabled="true" />
+
+							<p:outputLabel value="Número " for="numero" />
+							<p:inputText id="numero" size="5" maxlength="5"
+								value="#{cadastroPedidoBean.endereco.numero}" disabled="true" />
+
+							<p:outputLabel value="Cep " for="cep" />
+							<p:inputText id="cep" size="5" maxlength="5"
+								value="#{cadastroPedidoBean.endereco.cep}" disabled="true" />
+
+							<p:outputLabel value="Complemento " for="complemento" />
+							<p:inputText id="complemento" size="5" maxlength="5"
+								value="#{cadastroPedidoBean.endereco.complemento}"
+								disabled="true" />
+
+						</h:panelGrid>
+
+
+
+
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Observação">
+					<h:panelGrid columns="2" cellpadding="10">
+						<p:graphicImage name="demo/images/godfather/godfather3.jpg" />
+						<h:outputText
+							value="After a break of more than 15 years, director Francis Ford Coppola and writer Mario Puzo returned to the well for this third and final story of the fictional Corleone crime family. 
+                    Two decades have passed, and crime kingpin Michael Corleone, now divorced from his wife Kay has nearly succeeded in keeping his promise that his family would one day be completely legitimate." />
+					</h:panelGrid>
+				</p:tab>
+			</p:tabView>
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>

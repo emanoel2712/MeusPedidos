@@ -1,0 +1,99 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns="http://www.w3.org/1999/xhtml">
+
+	<ui:define name="titulo"> Pesquisa de Produto </ui:define>
+
+	<ui:define name="corpo">
+
+	<h:form>
+
+		<f:metadata>
+			<f:viewAction action="#{pesquisaProdutoBean.inicializar}" />
+		</f:metadata>
+
+		<h1>Pesquisa de produtos</h1>
+
+		<p:messages showDetail="true" showSummary="false" closable="true">
+			<p:autoUpdate />
+		</p:messages>
+
+		<p:toolbar>
+			<f:facet name="left">
+				<p:commandButton value="Pesquisa" />
+			</f:facet>
+			<f:facet name="right">
+				<p:button value="Novo" outcome="/produtos/cadastro-produto" />
+			</f:facet>
+		</p:toolbar>
+
+		<p:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
+			<p:outputLabel value="Código" for="codigo" />
+			<p:inputText id="codigo" size="60" maxlength="60" />
+
+			<p:outputLabel value="Descrição" for="descricao" />
+			<p:inputText id="descricao" size="60" maxlength="60" />
+		</p:panelGrid>
+
+		<p:dataTable value="#{pesquisaProdutoBean.produtos}" rows="10"
+			paginator="true" paginatorPosition="bottom" var="p" id="tabela"
+			emptyMessage="Nenhum produto encontrado."
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			currentPageReportTemplate="({currentPage} de {totalPages})"
+			rowsPerPageTemplate="10,25,50" style="margin-top: 20px;">
+
+			<p:column headerText="Código"
+				style="text-align: center; width: 100px;">
+				<h:outputText value="#{p.id}" />
+			</p:column>
+
+			<p:column headerText="Nome">
+				<h:outputText value="#{p.nome}" />
+			</p:column>
+			<p:column headerText="Categoria">
+				<h:outputText value="#{p.categoria.descricao}" />
+			</p:column>
+
+			<p:column headerText="Valor Unitário">
+				<h:outputText value="#{p.valorUnitario}" />
+			</p:column>
+			<p:column headerText="Estoque">
+				<h:outputText value="#{p.estoque}" />
+			</p:column>
+
+			<p:column style="text-align: center; width: 80px;">
+				<p:button title="Editar" icon="ui-icon-pencil"
+					outcome="/produtos/cadastro-produto">
+					<f:param name="produto" value="#{p.id}" />
+				</p:button>
+
+				<p:commandButton title="Excluir" icon="ui-icon-trash"
+					oncomplete="PF('confirmacaoExclusao').show();">
+					<f:setPropertyActionListener value="#{p}"
+						target="#{pesquisaProdutoBean.produtoSelecionado}" />
+				</p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+
+		<p:confirmDialog header="Exclusão de produto"
+			message="Tem certeza q deseja excluir esse produto"
+			widgetVar="confirmacaoExclusao">
+
+			<p:commandButton value="Sim" icon="ui-icon-check" iconPos="right"
+				action="#{pesquisaProdutoBean.excluir}" update="tabela"
+				oncomplete="PF('confirmacaoExclusao').hide(); return false;"
+				ajax="false" />
+
+			<p:button value="Não" icon="ui-icon-close"
+				onclick="PF('confirmacaoExclusao').hide(); return false;" />
+		</p:confirmDialog>
+
+
+
+	</h:form>
+</ui:define>
+</ui:composition>

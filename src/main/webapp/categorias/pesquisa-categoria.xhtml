@@ -1,0 +1,106 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+	<ui:define name="titulo">Pesquisa de Categorias</ui:define>
+
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{pesquisaCategoriaBean.inicializar}" />
+		</f:metadata>
+		<div id="conteudo">
+			<h:form>
+				<h1>Pesquisa de categorias</h1>
+
+				<p:messages showDetail="true" showSummary="false" closable="true">
+					<p:autoUpdate />
+				</p:messages>
+
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton value="Pesquisa" onclick="PF('botaoPesquisa').show();" />
+					</f:facet>
+					<f:facet name="right">
+						<p:button value="Novo" outcome="/categorias/cadastro-categoria" />
+					</f:facet>
+				</p:toolbar>
+
+				<p:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
+					<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="60" maxlength="60" />
+		            
+				</p:panelGrid>
+
+				<p:dataTable value="#{pesquisaCategoriaBean.categorias}" rows="10"
+					paginator="true" paginatorPosition="bottom" var="c" id="tabela"
+					emptyMessage="Nenhuma categoria encontrada."
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="({currentPage} de {totalPages})"
+					rowsPerPageTemplate="10,25,50" style="margin-top: 20px;">
+
+
+					<p:column headerText="Código"
+						style="text-align: center; width: 100px;">
+						<h:outputText value="#{c.id}" />
+					</p:column>
+
+
+					<p:column headerText="Descrição">
+						<h:outputText value="#{c.descricao}" />
+					</p:column>
+
+
+					<p:column style="text-align: center; width: 80px;">
+						<p:button title="Editar" icon="ui-icon-pencil"
+							outcome="/categorias/cadastro-categoria">
+							<f:param name="categoria" value="#{c.id}" />
+
+						</p:button>
+
+						<p:commandButton title="Excluir" icon="ui-icon-trash"
+							oncomplete="PF('confirmacaoExclusao').show();">
+							<f:setPropertyActionListener value="#{c}"
+								target="#{pesquisaCategoriaBean.categoriaSelecionada}" />
+						</p:commandButton>
+
+
+
+					</p:column>
+
+
+				</p:dataTable>
+				
+
+				<p:confirmDialog header="Exclusão de categoria"
+					message="Tem certeza q deseja excluir essa categoria?"
+					widgetVar="confirmacaoExclusao">
+
+					<p:commandButton value="Sim" icon="ui-icon-check" iconPos="right"
+						action="#{pesquisaCategoriaBean.excluir}" update="tabela"
+						oncomplete="PF('confirmacaoExclusao').hide(); return false;"
+						ajax="false" />
+
+					<p:button value="Não" icon="ui-icon-close"
+						onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				</p:confirmDialog>
+		
+			</h:form>
+			<h:form>
+			
+			<p:dialog header="Pesquisa" widgetVar="botaoPesquisa" modal="true">
+			
+			<p:outputLabel value="Pesquisa" for="pesquisa" />
+				<p:inputText id="pesquisa" size="60" maxlength="60"
+					 />
+					<p:button value="Pesquisar" action="#{pesquisaCategoriaBean.pesquisarPorNome}"/>			
+						
+						</p:dialog>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

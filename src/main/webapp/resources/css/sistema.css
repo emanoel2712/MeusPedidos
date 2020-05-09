@@ -1,0 +1,83 @@
+body {
+	margin: 0;
+	font-size: 90% !important;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+	margin-bottom: 20px;
+	height: 45px;
+	background-color: #0388e5;
+	color: #fff;
+	box-shadow: 0px 2px 2px #ccc;
+	height: 45px;
+}
+
+header>div {
+	margin-left: 5px;
+}
+
+.logo {
+	float: left;
+}
+
+.menu {
+	float: right;
+	margin-right: 80px;
+}
+
+.menubar {
+	border: 0;
+	padding: 0;
+	padding-top: 6px !important;
+	background: none;
+}
+
+.menubar .ui-menu-parent>a .ui-menuitem-text, .menubar>.ui-menu-list>.ui-menuitem>a>.ui-menuitem-text
+	{
+	color: #fff;
+}
+
+.menubar .ui-icon-triangle-1-s {
+	background: url(#{ resource [ 'imagens:seta-para-baixo-branco.png' ]
+}
+
+)
+no-repeat
+;
+
+
+}
+.menubar .ui-menuitem .ui-state-hover>span {
+	color: #0388e5 !important;
+}
+
+.menubar .ui-state-hover .ui-icon-triangle-1-s {
+	background: url(#{ resource [ 'imagens:seta-para-baixo-azul.png' ]
+}
+
+)
+no-repeat
+;
+
+
+}
+.menubar .ui-menuitem .ui-state-hover {
+	background-color: #fff;
+}
+
+.menu form {
+	display: inline-block;
+}
+
+.usuario-logado {
+	float: left;
+	height: 45px;
+	line-height: 45px;
+	margin-right: 50px;
+}
+
+#conteudo {
+	padding: 0 10px;
+}
+

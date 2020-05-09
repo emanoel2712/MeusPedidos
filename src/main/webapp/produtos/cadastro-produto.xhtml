@@ -1,0 +1,71 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns="http://www.w3.org/1999/xhtml">
+
+
+	<ui:define name="titulo"> Cadastro de Produto </ui:define>
+
+	<ui:define name="corpo">
+
+
+		<h:form>
+			<f:metadata>
+
+				<f:viewAction action="#{cadastroProdutoBean.inicializar}" />
+			</f:metadata>
+			<h1>Cadastro de produtos</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar>
+				<f:facet name="left">
+					<p:button value="Novo" outcome="/produtos/cadastro-produto" />
+					<p:commandButton value="Salvar" ajax="false"
+						action="#{cadastroProdutoBean.salvar}" />
+				</f:facet>
+				<f:facet name="right">
+					<p:button value="Pesquisar" outcome="/produtos/pesquisa-produto" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
+
+
+				<p:outputLabel value="Nome" for="nome" />
+				<p:inputText id="nome" size="60" maxlength="60"
+					value="#{cadastroProdutoBean.produto.nome}" />
+
+
+
+				<p:outputLabel for="categoria" value="Categoria" />
+				<p:selectOneMenu value="#{cadastroProdutoBean.produto.categoria}"
+					id="categoria" required="true">
+
+					<p:ajax listener="#{cadastroProdutoBean.categoriaSelecionada}" />
+
+					<f:selectItem itemLabel="Selecione uma categoria"
+						noSelectionOption="true" />
+
+					<f:selectItems value="#{cadastroProdutoBean.categorias}"
+						itemLabel="#{c.descricao}" var="c" itemValue="#{c}" />
+				</p:selectOneMenu>
+
+
+				<p:outputLabel value="Valor Unitario: " for="valorUnitario" />
+				<p:inputText id="valorUnitario" size="5" maxlength="5"
+					value="#{cadastroProdutoBean.produto.valorUnitario}" />
+
+
+
+				<p:outputLabel value="Estoque" for="estoque" />
+				<p:inputText id="estoque" size="5" maxlength="5"
+					value="#{cadastroProdutoBean.produto.estoque}" />
+
+
+			</p:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

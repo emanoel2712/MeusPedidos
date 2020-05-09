@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>Sistema de Pedidos de Venda</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<h:outputStylesheet library="css" name="sistema.css" />
+	<link type="image/x-icon" rel="shortcut icon"
+		href="#{resource['imagens:favicon.ico']}" />
+</h:head>
+
+<h:body>
+	<header>
+		<div class="logo">
+			<h:graphicImage library="imagens" name="logo-transparente.png" />
+		</div>
+		<div class="menu">
+			<span class="usuario-logado">#{loginBean.usuarioLogado}</span>
+			<h:form>
+				<p:menubar styleClass="menubar">
+					<p:submenu label="Cadastros">
+						<p:menuitem value="Categorias"
+							outcome="/categorias/cadastro-categoria" />
+						<p:menuitem value= "Produtos" outcome="/produtos/cadastro-produto" />
+						<p:menuitem value="Clientes" outcome="/clientes/cadastro-cliente"/>
+						<p:menuitem value="Usuarios" outcome="/usuarios/cadastro-usuario"/>
+					</p:submenu>
+
+					<p:submenu label="Pedidos">
+						<p:menuitem value="Novo Pedido" />
+						<p:menuitem value="Pesquisa" />
+					</p:submenu>
+					<p:menuitem value="Sair" action="#{loginBean.logout}"/>
+				</p:menubar>
+			</h:form>
+		</div>
+	</header>
+	<div id="conteudo">
+		<ui:insert name="corpo" />
+
+	</div>
+</h:body>
+
+</html>

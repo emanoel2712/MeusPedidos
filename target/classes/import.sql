@@ -1,0 +1,1 @@
+insert into usuario (nome, email, senha, ativo) values ('Administrador', 'admin@meuspedidos.com', 'admin', 1);

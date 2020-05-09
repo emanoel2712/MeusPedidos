@@ -1,0 +1,54 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns="http://www.w3.org/1999/xhtml" > 
+
+<ui:define name="titulo"> Cadastro de Categoria </ui:define>
+
+<ui:define name="corpo">
+
+	<h:form id="formulario">
+		<f:metadata>
+			<o:viewParam name="categoria"
+				value="#{cadastroCategoriaBean.categoria}" />
+                 
+			<f:viewAction action="#{cadastroCategoriaBean.inicializar}" />
+		</f:metadata>
+		<h1>Cadastro de categoria</h1>
+
+		<p:messages showDetail="true" showSummary="false" closable="true">
+			<p:autoUpdate />
+		</p:messages>
+
+		<p:toolbar>
+
+			<f:facet name="left">
+				<p:button value="Novo" outcome="/categorias/cadastro-categoria" />
+				<p:commandButton value="Salvar" ajax="false" update="formulario"
+					action="#{cadastroCategoriaBean.salvar}" />
+
+			</f:facet>
+			<f:facet name="right">
+				<p:button value="Pesquisar" outcome="/categorias/pesquisa-categoria" />
+			</f:facet>
+
+		</p:toolbar>
+
+		<p:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
+			<p:outputLabel value="Descrição" for="descricao" />
+			<p:inputText id="descricao" size="60" maxlength="60"
+				value="#{cadastroCategoriaBean.categoria.descricao}" >
+				<p:ajax event="blur" update="texto2" listener="#{cadastroCategoriaBean.modificaTexto}"/>
+				</p:inputText>
+				<h:outputText id="texto2" value="#{cadastroCategoriaBean.categoria.descricao}"/>
+				
+
+		</p:panelGrid>
+
+	</h:form>
+</ui:define>
+
+</ui:composition>
