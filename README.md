@@ -24,7 +24,7 @@ Sistema Web de Gerenciamento de Pedidos
 # Tecnologias Utilizadas
 
 - Mysql
-- Spring Boot
+- Java Server Faces
 - Primefaces
 - Hibernate
 - JPA
