@@ -27,6 +27,7 @@ Sistema Web de Gerenciamento de Pedidos
 - Java Server Faces
 - Primefaces
 - Hibernate
+- Maven
 - JPA
 
 # Como executar o projeto
